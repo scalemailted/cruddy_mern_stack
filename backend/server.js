@@ -23,10 +23,8 @@ app.use( bodyParser.json() );
 
 //get method
 router.get('/getData', (req, res) =>{ 
-	Data.find( (err, data) => {  
-		if (err) return res.json({success: false, error: err});
-		return res.json({success: true, data: data});
-	});
+	let callback = (err, data) => res.json({success: true, data: data});
+	Data.find( callback );
 });
 
 //update method
