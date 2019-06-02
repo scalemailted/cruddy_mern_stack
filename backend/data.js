@@ -1,31 +1,9 @@
-uuid = 0;
-database = [];
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-class Data{
-	constructor(){
-		this._id = uuid++;
-	}
+const DataSchema = new Schema({  
+	id: Number,
+	message: String
+});
 
-	static find(){
-		return database;
-	}
-
-	static findByIdAndUpdate(id, update){
-		database.forEach( item => { 
-			if (+item._id === +id){
-				Object.assign(item, update)
-			}
-		});
-	}
-
-	static findByIdAndRemove(id){
-		parseInt(id);
-		database = database.filter( item => +item._id !== +id)
-	}
-
-	save(){
-		database.push(this);
-	}
-}
-
-module.exports = Data;
+module.exports = mongoose.model("Data", DataSchema);

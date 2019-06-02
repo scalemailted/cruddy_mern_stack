@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const express = require('express');
 const logger = require('morgan');
 const API_PORT = 3001;
@@ -5,6 +6,14 @@ const app = express();
 const router = express.Router();
 const Data = require('./data');
 const bodyParser = require("body-parser");
+const cors = require('cors');
+app.use( cors() );
+
+//this is the mongodb 
+const dbRoute = 'mongodb+srv://dummy1:dummy1password@cluster0-nkfeq.mongodb.net/test?retryWrites=true';
+mongoose.connect(dbRoute, {useNewUrlParser: true} );
+let db = mongoose.connection;
+db.once( 'open', ()=>console.log('connected to database') )
 
 //(optional) only for logging
 app.use( logger('dev') );
@@ -14,22 +23,25 @@ app.use( bodyParser.json() );
 
 //get method
 router.get('/getData', (req, res) =>{ 
-	let data = Data.find();
-	return res.json({success: true, data: data});
+	Data.find( (err, data) => {  
+		if (err) return res.json({success: false, error: err});
+		return res.json({success: true, data: data});
+	});
 });
 
 //update method
 router.post('/updateData', (req, res) => {
 	const {id, update} = req.body;
-	Data.findByIdAndUpdate(id, update);
-	return res.json({success:true});
+	let callback = () => res.json({success: true})
+	Data.findByIdAndUpdate( id, update, callback );
 });
+
 
 //delete method
 router.delete('/deleteData', (req, res) =>{
 	const {id} = req.body;
-	Data.findByIdAndRemove(id);
-	return res.json({success:true});
+	let callback = () => res.json({success: true})
+	Data.findByIdAndRemove(id, callback );
 });
 
 //put method
@@ -41,8 +53,8 @@ router.post('/putData', (req, res)=>{
 	let data = new Data();
 	data.message = message;
 	data.id = id;
-	data.save();
-	return res.json({success: true});
+	let callback = () => res.json({success: true})
+	data.save( callback );
 });
 
 //append /api for our http requests

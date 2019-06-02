@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 
 class OptionDelete extends Component{
 	state = { id: null };
@@ -12,13 +13,11 @@ class OptionDelete extends Component{
 		let uuid = null;
 		for (let item of data){
 			if(+item.id === +id){
-				uuid = item.id
+				uuid = item._id
 			}
 		}
 
-		let filtered_data = data.filter( item => +item.id !== +uuid );
-		data.length = 0;
-		data.push( ...filtered_data);
+		axios.delete('http://localhost:3001/api/deleteData',{ data: {id: uuid} } );
 	}
 
 	render(){

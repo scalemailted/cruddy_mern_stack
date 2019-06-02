@@ -12,7 +12,9 @@ class App extends Component{
   }
 
   getData(){
-    this.setState({data: this.state.data});
+    fetch('http://localhost:3001/api/getData')
+      .then( (data) => data.json() )
+      .then( (res) => this.setState({data: res.data})  )
   }
 
   render(){

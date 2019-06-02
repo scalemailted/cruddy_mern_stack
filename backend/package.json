@@ -12,6 +12,8 @@
   "dependencies": {
     "express": "*",
     "morgan": "*",
-    "body-parser": "*"
+    "body-parser": "*",
+    "cors": "*",
+    "mongoose": "*"
   }
 }

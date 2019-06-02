@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 
 class OptionUpdate extends Component{
 	state = { id: null, message: null };
@@ -16,10 +17,11 @@ class OptionUpdate extends Component{
 		parseInt(id);
 		for (let item of data){
 			if (+item.id === +id){
-				uuid = item;
+				uuid = item._id;
 			}
 		}
-		uuid.message = message;
+		let requestData = {id: uuid, update: {message: message} }
+		axios.post('http://localhost:3001/api/updateData', requestData);
 	}
 
 	render(){

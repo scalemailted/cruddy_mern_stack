@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 
 class OptionAdd extends Component{
 	state = { message: null };
@@ -14,8 +15,7 @@ class OptionAdd extends Component{
 			id++;
 		}
 		let item = {id: id, message: message};
-		console.log(data)
-		data.push(item);
+		axios.post('http://localhost:3001/api/putData', item);
 	}
 
 	render(){
